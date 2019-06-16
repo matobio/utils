@@ -1,8 +1,7 @@
 package com.tobio.tobioutils.utils;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.function.BiConsumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -11,11 +10,32 @@ import com.tobio.tobioutils.collections.list.ListUtils;
 
 public class QuantityDistributor {
 
-    public static <T> Map<T, Number> distributeQuantity(Number distributionQuantity, Number totalQuantity, List<T> listElements, Function<? super T, ? extends Number> functionToGetQuantity) {
+    private QuantityDistributor() {
+        // Empty
+    }
 
-        Map<T, Number> result = new HashMap<>();
 
-        Number totalElementsQauntity = ListUtils.sum(listElements.stream().map(functionToGetQuantity).collect(Collectors.toList()));
+    /**
+     * This method ponderate quantity in the elements of the list.
+     *
+     * <br><br>
+     * Example:
+     * <br>
+     * <li> QuantityDistributor.distributeQuantity(10, 30, list, QuantityElements::getQuantity, QuantityElements::setQuantity);
+     *
+     *
+     * <br>
+     * <br>
+     * @param distributionQuantity
+     * @param totalQuantity
+     * @param listElements
+     * @param getQuantityFunction
+     * @param setQuantityFunction
+     */
+    public static <T> void distributeQuantity(Number distributionQuantity, Number totalQuantity, List<T> listElements, Function<? super T, ? extends Number> getQuantityFunction,
+            BiConsumer<T, Number> setQuantityFunction) {
+
+        Number totalElementsQauntity = ListUtils.sum(listElements.stream().map(getQuantityFunction).collect(Collectors.toList()));
         Number pendingQuantity = totalElementsQauntity.doubleValue() * distributionQuantity.doubleValue() / totalQuantity.doubleValue();
 
         int size = listElements.size();
@@ -24,7 +44,7 @@ public class QuantityDistributor {
             T element = listElements.get(index);
 
             Number quantityToAssign = null;
-            Number ponderatedQuantity = functionToGetQuantity.apply(element).doubleValue() * distributionQuantity.doubleValue() / totalQuantity.doubleValue();
+            Number ponderatedQuantity = getQuantityFunction.apply(element).doubleValue() * distributionQuantity.doubleValue() / totalQuantity.doubleValue();
 
             if (CollectionUtils.isLastElement(index, listElements)) {
                 quantityToAssign = pendingQuantity;
@@ -33,11 +53,8 @@ public class QuantityDistributor {
                 quantityToAssign = ponderatedQuantity;
                 pendingQuantity = pendingQuantity.doubleValue() - quantityToAssign.doubleValue();
             }
-
-            result.put(element, quantityToAssign);
+            setQuantityFunction.accept(element, quantityToAssign);
         }
-
-        return result;
     }
 
 }

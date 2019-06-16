@@ -2,7 +2,6 @@ package com.tobio.tobioutils.utils;
 
 import java.util.Arrays;
 import java.util.List;
-import java.util.Map;
 
 import org.junit.Assert;
 import org.junit.Before;
@@ -17,20 +16,25 @@ public class QuantityDistributorTest {
     @Test
     public void testDistributeQuantity() {
 
-        List<QuantityElements> list = Arrays.asList(new QuantityElements(10), new QuantityElements(20), new QuantityElements(30));
-        Map<QuantityElements, Number> result = QuantityDistributor.distributeQuantity(10, 30, list, QuantityElements::getQuantity);
+        try {
 
-        Assert.assertEquals(result.get(list.get(0)), 10d * 10 / 30);
-        Assert.assertEquals(result.get(list.get(1)), 20d * 10 / 30);
-        Assert.assertEquals(result.get(list.get(2)), 30d * 10 / 30);
+            List<QuantityElements> list = Arrays.asList(new QuantityElements(10), new QuantityElements(20), new QuantityElements(30));
+            QuantityDistributor.distributeQuantity(10, 30, list, QuantityElements::getQuantity, QuantityElements::setQuantity);
 
-        list = Arrays.asList(new QuantityElements(1), new QuantityElements(4), new QuantityElements(4));
-        result = QuantityDistributor.distributeQuantity(5, 9, list, QuantityElements::getQuantity);
+            Assert.assertEquals(list.get(0).getQuantity(), 10d * 10 / 30);
+            Assert.assertEquals(list.get(1).getQuantity(), 20d * 10 / 30);
+            Assert.assertEquals(list.get(2).getQuantity(), 30d * 10 / 30);
 
-        Assert.assertEquals(result.get(list.get(0)), 1d * 5 / 9);
-        Assert.assertEquals(result.get(list.get(1)), 4d * 5 / 9);
-        Assert.assertEquals(result.get(list.get(2)), 4d * 5 / 9);
+            list = Arrays.asList(new QuantityElements(1), new QuantityElements(4), new QuantityElements(4));
+            QuantityDistributor.distributeQuantity(5, 9, list, QuantityElements::getQuantity, QuantityElements::setQuantity);
 
+            Assert.assertEquals(list.get(0).getQuantity(), 1d * 5 / 9);
+            Assert.assertEquals(list.get(1).getQuantity(), 4d * 5 / 9);
+            Assert.assertEquals(list.get(2).getQuantity(), 4d * 5 / 9);
+
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
     class QuantityElements {
@@ -50,6 +54,12 @@ public class QuantityDistributorTest {
 
         public void setQuantity(Number quantity) {
             this.quantity = quantity;
+        }
+
+
+        @Override
+        public String toString() {
+            return this.quantity.toString();
         }
     }
 

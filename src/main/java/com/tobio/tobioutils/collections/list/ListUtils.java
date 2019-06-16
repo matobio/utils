@@ -5,6 +5,11 @@ import java.util.Objects;
 
 public class ListUtils {
 
+    private ListUtils() {
+        // Emtpty
+    }
+
+
     public static Number sum(List<Number> list) {
         return list.stream().filter(Objects::nonNull).mapToDouble(Number::doubleValue).sum();
     }
