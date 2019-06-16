@@ -11,6 +11,9 @@ public class ListUtils {
 
 
     public static Number sum(List<Number> list) {
+        if (list == null) {
+            return 0.0d;
+        }
         return list.stream().filter(Objects::nonNull).mapToDouble(Number::doubleValue).sum();
     }
 }
