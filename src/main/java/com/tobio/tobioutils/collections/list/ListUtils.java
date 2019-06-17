@@ -3,10 +3,12 @@ package com.tobio.tobioutils.collections.list;
 import java.util.List;
 import java.util.Objects;
 
-public class ListUtils {
+import com.tobio.tobioutils.collections.CollectionUtils;
+
+public class ListUtils extends CollectionUtils {
 
     private ListUtils() {
-        // Emtpty
+        super();
     }
 
 
