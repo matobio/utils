@@ -6,14 +6,13 @@ public class Pair<T, S> implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    private T                 first            = null;
-    private S                 second           = null;
+    private transient T       first            = null;
+    private transient S       second           = null;
 
 
-    public Pair() {
-
-    }
-
+    // public Pair() {
+    //
+    // }
 
     public Pair(T first, S second) {
         this.first = first;
