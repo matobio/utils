@@ -27,6 +27,28 @@ public class ListUtilsTest {
 
 
     @Test
+    public void testSort() {
+
+        List<TestObject> list = new ArrayList<>();
+        list.add(new TestObject(0, 1, 2, 10d));
+        list.add(new TestObject(1, 20, 2, 20d));
+        list.add(new TestObject(2, 3, 2, 15d));
+        list.add(new TestObject(3, 3, 1, 30d));
+        list.add(new TestObject(4, 2, 1, 14d));
+        list.add(new TestObject(5, 3, 2, 10d));
+
+        list = ListUtils.sortMultiple(list, TestObject::getLength, TestObject::getQuantity);
+
+        Assert.assertEquals(list.get(0).getId(), Integer.valueOf(0));
+        Assert.assertEquals(list.get(1).getId(), Integer.valueOf(4));
+        Assert.assertEquals(list.get(2).getId(), Integer.valueOf(5));
+        Assert.assertEquals(list.get(3).getId(), Integer.valueOf(2));
+        Assert.assertEquals(list.get(4).getId(), Integer.valueOf(3));
+        Assert.assertEquals(list.get(5).getId(), Integer.valueOf(1));
+    }
+
+
+    @Test
     public void testGroupMultiple() {
 
         List<TestObject> list = new ArrayList<>();
@@ -57,6 +79,17 @@ public class ListUtilsTest {
             this.length = length;
             this.width = width;
             this.quantity = quantity;
+        }
+
+
+        @Override
+        public String toString() {
+            return "Id: " + this.id + ", length: " + this.length + ", width: " + this.width + ", quantity: " + this.quantity;
+        }
+
+
+        public String getIdString() {
+            return this.id.toString();
         }
 
 
